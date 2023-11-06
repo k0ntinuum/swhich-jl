@@ -1,0 +1,75 @@
+
+
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{setspace}
+\usepackage{ mathrsfs }
+\usepackage{graphicx}
+\usepackage{amssymb} %maths
+\usepackage{amsmath} %maths
+\usepackage[margin=0.2in]{geometry}
+\usepackage{graphicx}
+\usepackage{ulem}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{10pt}
+\usepackage{hyperref}
+\usepackage[autostyle]{csquotes}
+
+\usepackage{cancel}
+\renewcommand{\i}{\textit}
+\renewcommand{\b}{\textbf}
+\newcommand{\q}{\enquote}
+%\vskip1.0in
+
+
+
+
+
+\begin{document}
+
+{\setstretch{0.0}{
+
+
+\b{Swhich} is similar to \b{Eel} and \b{Millipede}, but it uses two \q{keystrings} instead of one, and both \q{roll into} the other, as if they were twisted, hence the name. 
+
+
+\begin{verbatim}
+function swhich!(f)
+    f[1] = [f[1][1:end];f[2][1]] 
+    f[2] = [f[2][2:end];f[1][1]]
+    popfirst!(f[1])
+end
+\end{verbatim}
+
+In the encoding function, the leading entries of both keystrings are added mod $b$ to the plaintext symbol to get the ciphertext symbol. Then the \q{tapes} (keystrings) are tangled/swhiched. Finally the new top-left entry is modified. The plaintext symbol is added to it (again, mod $n$). This means the plaintext symbol affects the key immediately before it acts on the \i{next} plaintext symbol. (Note that Julia is 1-indexed.)
+
+\begin{verbatim}
+function encode(p,q,n)
+    f = deepcopy(q)
+    c = Int64[]
+    for i in eachindex(p)
+        push!(c, ( f[1][1] + f[2][1] + p[i] )%n )
+        swhich!(f)
+        f[1][1] = (f[1][1] + p[i])%n
+    end
+    c
+end
+\end{verbatim}
+
+To move from encoding to encryption, we do the usual reversal between rounds. We also \q{autospin} and make the length of key the default number of rounds. In this case the autospin is a simple circular shift. 
+
+\begin{verbatim}
+function encrypt(p,q,n)
+    l = length(q)
+    for i in 1:l
+        f = deepcopy(q)
+        f = circshift(f,i)
+        p = encode(p,f,n)
+        p = reverse(p)
+    end
+    p
+end
+\end{verbatim}
+
+
+\end{document}
