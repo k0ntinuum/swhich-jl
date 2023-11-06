@@ -41,7 +41,7 @@ function swhich!(f)
 end
 \end{verbatim}
 
-In the encoding function, the leading entries of both keystrings are added mod $n$ to the plaintext symbol to get the ciphertext symbol. Then the \q{tapes} (keystrings) are tangled/swhiched. Finally the new first entries entry is modified. The plaintext symbol is added to the top left and the newest ciphertext symbol is added to the bottom left (both, again, mod $n$). (Note that Julia is 1-indexed.)
+In the encoding function, the leading entries of both keystrings are added mod $n$ to the plaintext symbol to get the ciphertext symbol. Then the \q{tapes} (keystrings) are tangled/swhiched. Finally the new first entries entry are modified. The plaintext symbol is added to the top left and the newest ciphertext symbol is added to the bottom left (both, again, mod $n$). (Note that Julia is 1-indexed.)
 
 \begin{verbatim}
 function encode!(p,f,n)
