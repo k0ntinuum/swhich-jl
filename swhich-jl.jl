@@ -5,19 +5,32 @@ function key(n,l)
     k
 end
 
-
 function str(v,s)
     #out_alph = "abcdefghijklmnopqrstuvwxyz" * string(\u2586)    
-    out_alph = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" * string('\u25A0')
-    #out_alph = "O|"
+    #out_alph = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" * string('\u25A0')
+    out_alph = "O|"
     join(map(i -> out_alph[i+1:i+1] * s,v ))
 end
-rgb(r,g,b) =  "\e[38;2;$(r);$(g);$(b)m"
-red() = rgb(255,0,0)
-yellow() = rgb(255,255,0)
-white() = rgb(255,255,255)
-gray(h) = rgb(h,h,h)
 
+function rgb(r,g,b)
+    "\e[38;2;$(r);$(g);$(b)m"
+end
+
+function red()
+    rgb(255,0,0)
+end
+
+function yellow()
+    rgb(255,255,0)
+end
+
+function white()
+    rgb(255,255,255)
+end
+
+function gray(h)
+    rgb(h,h,h)
+end
 
 function print_key(f) 
     print(white(),"f = \n", str(f[1],""),"\n", str(f[2],""),"\n")
@@ -32,8 +45,6 @@ end
 function print_vec(v)
     print(str(v,""),"\n")
 end
-
-
 
 function encode!(p,f,n)
     c = Int64[]
@@ -80,7 +91,6 @@ function decrypt(c,q,n)
     end
     c
 end
-
 
 function demo(n)
     l = 64
